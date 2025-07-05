@@ -20,3 +20,5 @@ app = FastAPI(
 app.include_router(alunos_router, tags=["alunos"])
 app.include_router(cursos_router, tags=["cursos"])
 app.include_router(matriculas_router, tags=["matriculas"])
+
+""" MARVEL Aula 1""" 

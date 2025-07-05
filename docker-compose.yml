@@ -1,0 +1,31 @@
+# Especifica a versão da sintaxe do Docker Compose. É uma boa prática definir isso.
+version: '3.8'
+
+# Define os serviços (contêineres) que a sua aplicação precisa para rodar.
+# Cada serviço pode ser uma parte da sua aplicação, como o backend, um banco de dados, etc.
+services:
+  # Define o serviço da sua aplicação web principal. Nós o chamamos de 'web'.
+  web:
+    # Função: Construir a imagem Docker para este serviço.
+    # O '.' indica que o Dockerfile está no mesmo diretório que este arquivo,
+    # e o Docker Compose o usará para criar a imagem.
+    build: .
+    container_name: api # Nome do contêiner que será criado para este serviço.
+    # Função: Habilitar a comunicação com o contêiner a partir da sua máquina.
+    # Mapeia a porta 8000 da sua máquina (host) para a porta 8000 dentro do contêiner.
+    # Isso permite que você acesse a aplicação no seu navegador via http://localhost:8000.
+    ports:
+      - "8000:8000"
+
+    # Função: Sincronizar o código-fonte para desenvolvimento em tempo real.
+    # O diretório './app' na sua máquina é espelhado em '/app' no contêiner.
+    # A principal vantagem é que você pode editar o código e ver as mudanças
+    # refletidas na aplicação rodando, sem precisar reconstruir a imagem Docker.
+    volumes:
+      - .:/app
+
+    # Função: Definir o comando de inicialização para o modo de desenvolvimento.
+    # Este comando sobrescreve o CMD do Dockerfile e inicia o servidor Uvicorn
+    # com a opção '--reload'. Isso faz com que o servidor reinicie automaticamente
+    # toda vez que um arquivo de código é alterado, agilizando muito o ciclo de desenvolvimento.
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
